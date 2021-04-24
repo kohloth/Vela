@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		button, input {
+			box-sizing: border-box;
+			display: block;
+			width: 300px;
+			padding: 5px;
+			margin: 0 0 5px 0;
+		}
+	</style>
+	<script>
+		function showAMessage() {
+			document.getElementById('messages').insertAdjacentHTML('afterbegin', '<li>Lobster!</li>');
+		}
+		function showAComplexMessage() {
+			let userMessage = document.getElementById('message-input').value;
+			for (var i = 1; i < 10000000; i++) {
+				userMessage = btoa(userMessage);
+				userMessage = atob(userMessage);
+			}
+			let outputMessage = userMessage;
+			document.getElementById('messages').insertAdjacentHTML('afterbegin', `<li>${outputMessage}</li>`);
+		}
+		function showAComplexMessageUsingAsync() {
+			setTimeout(() => {
+				let userMessage = document.getElementById('message-input').value;
+				for (var i = 1; i < 10000000; i++) {
+					userMessage = btoa(userMessage);
+					userMessage = atob(userMessage);
+				}
+				let outputMessage = userMessage;
+				document.getElementById('messages').insertAdjacentHTML('afterbegin', `<li>${outputMessage}</li>`);
+			}, 3000);
+		}
+		function showAComplexMessageUsingWorker() {
+			let userMessage = document.getElementById('message-input').value;
+			worker.postMessage({eventType: 'plainMessageSent', userMessage});
+		}
+		function sendAnInvalidEvent() {
+			worker.postMessage({eventType: 'giveMeSugarAndWater'});
+		}
+		
+		var worker = new Worker('worker.js');
+		console.log(worker);
+		worker.addEventListener('message', (e) => {
+			switch (e.data.eventType) {
+				case 'complexMessageSent':
+					break;
+				default:
+					throw new Error('Invalid message type: ' + e.data.eventType);
+			}
+			document.getElementById('messages').insertAdjacentHTML('afterbegin', `<li>${e.data.complexMessage}</li>`);
+		});
+	</script>
+</head>
+<body>
+	<input type="text" id="message-input">
+	<button onclick="showAMessage()">Show a message</button>
+	<button onclick="showAComplexMessage()">Show a complex message</button>
+	<button onclick="showAComplexMessageUsingAsync()">Show a complex message using async</button>
+	<button onclick="showAComplexMessageUsingWorker()">Show a complex message using worker</button>
+	<button onclick="sendAnInvalidEvent()">Send an invalid event</button>
+	<ul id="messages"></ul>
+</body>
+</html>

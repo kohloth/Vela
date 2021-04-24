@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+			console.log('Simple ###############################################');
+			console.log({oneTrue:				(true)  });
+			console.log({oneFalse:				(false)  });
+			console.log({trueAndFalse:			(true && false)  });
+			console.log({trueOrFalse:			(true || false)  });
+			console.log({falseAndTrue:			(false && true)  });
+			console.log({falseOrTrue:			(false || true)  });
+
+			console.log('Compound negation ###############################################');
+			console.log({notTrueOrFalse:		(!true || false)  });
+
+			console.log('Compound conditions ###############################################');
+			console.log({compoundOrUngrpd:		(true || true || false)  });
+			console.log({compoundOrUngrpd2:		(false || true || true)  });
+			console.log({compoundAndUngrpd:		(true || true || false)  });
+			console.log({compoundMixedUngrpd:	(false || true && true)  });
+			console.log({compoundMixedGrpd1:	(false || (true && true))  });
+			console.log({compoundMixedGrpd2:	((false || true) && true)  });
+
+			// From the line directly above, we can deduce that NOT operators
+			// placed near the start of an expression invert the portion of the expression
+			// that immediately follows the operator, and not the expression in its entirety.
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

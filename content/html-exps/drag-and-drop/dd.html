@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			background: #111;
+			color: #ccc;
+			font-family: ubuntu, sans-serif;
+			padding: 10px;
+		}
+		* {
+			box-sizing: border-box;
+		}
+		h1 {
+			font-size: 15px;
+			margin: 0;
+			padding: 10px;
+		}
+		input {
+			display: inline-block;
+			margin: 0 0 0 10px;
+			width: 20px;
+			height: 20px;
+			position: relative;
+			top: 5px;
+		}
+		p {
+			display: inline-block;
+		}
+		.sources-wrap,
+		.targets {
+			padding: 20px;
+			float: left;
+			width: calc(50% - 10px);
+			background: #333;
+		}
+		.sources-wrap {
+			padding: 20px;
+			margin-right: 20px;
+		}
+		.sources {
+
+		}
+		.targets {
+
+		}
+		.targets > div {
+			background: #0a0a0a;
+			margin-bottom: 20px;
+		}
+		.targets > div:last-child {
+			margin-bottom: 0;
+		}
+		.targets > div h1 {
+			display: block;
+			background: #444444;
+		}
+		#link-target,
+		#text-target,
+		#node-target {
+			padding: 20px;
+			min-height: 100px;
+		}
+		#link-target {
+		
+		}
+		#text-target {
+		
+		}
+		#node-target {
+		
+		}
+		.sources > *,
+		#link-target > *,
+		#text-target > *,
+		#node-target > * {
+			display: inline-block;
+			background: #797979;
+			color: #000;
+			padding: 4px 7px;
+			margin: 5px;
+		}
+		.sources > a,
+		#link-target > a,
+		#text-target > a,
+		#node-target > a {
+			background: #3c4775;
+			text-decoration: none;
+		}
+		.sources > div,
+		#link-target > div,
+		#text-target > div,
+		#node-target > div {
+			background: #27803c;
+		}
+	</style>
+	<script>
+	
+		function handleDragStart(e) {
+			let tagName = e.target.tagName.toLowerCase();
+			switch (tagName) {
+				case 'a':
+					e.dataTransfer.setData('text/uri-list', e.target.getAttribute('href'));
+					e.dataTransfer.setData('text/plain', e.target.textContent);
+					break;
+				case 'p':
+					e.dataTransfer.setData('text/plain', e.target.textContent);
+					break;
+				case 'div':
+					e.dataTransfer.setData('text/node-key', e.target.dataset.item);
+					e.dataTransfer.setData('text/plain', e.target.textContent);
+					break;
+				default:
+					throw new Error('Invalid tag name: ' + tagName);
+			}
+		};
+		
+		function handleDragOver(e) {
+			let dropZoneId = e.target.getAttribute('id');
+			if (dropZoneId === 'link-target' && [...e.dataTransfer.types].includes('text/uri-list')) {
+				e.preventDefault();
+			}
+			if (dropZoneId === 'text-target' && ([...e.dataTransfer.types].includes('text/uri-list') || [...e.dataTransfer.types].includes('text/plain'))) {
+				e.preventDefault();
+			}
+			if (dropZoneId === 'node-target' && [...e.dataTransfer.types].includes('text/node-key')) {
+				e.preventDefault();
+			}
+		}
+		
+		function handleDrop(e) {
+			let dropZoneId = e.target.getAttribute('id');
+			let data;
+			e.preventDefault();
+			switch (dropZoneId) {
+				case 'link-target':
+					data = e.dataTransfer.getData('text/uri-list');
+					e.target.insertAdjacentText('beforeend', data + ' ');
+					break;
+				case 'text-target':
+					data = e.dataTransfer.getData('text/plain');
+					e.target.insertAdjacentText('beforeend', data + ' ');
+					break;
+				case 'node-target':
+					data = e.dataTransfer.getData('text/node-key');
+					let node = document.querySelector(`[data-item=${data}]`);
+					e.target.insertAdjacentElement('beforeend', node.cloneNode(true));
+					break;
+				default:
+					throw new Error('Invalid drop zone type: ' + dropZoneId);
+			}
+		}
+		
+		function handleDragEnd(e) {
+			let checkbox = document.getElementsByTagName('input')[0];
+			let shouldCopy = checkbox.checked;
+			if (!shouldCopy) {
+				e.target.outerHTML = '';
+			}
+		}
+	
+		document.addEventListener('DOMContentLoaded', () => {
+			Array.from(document.querySelector('.sources').children).forEach(child => {
+				child.addEventListener('dragstart', handleDragStart);
+				child.addEventListener('dragend', handleDragEnd);
+			});
+			Array.from(document.querySelectorAll('.targets > div > div')).forEach(child => {
+				// let dropZoneId = child.getAttribute('id');
+				child.addEventListener('dragover', handleDragOver);
+				child.addEventListener('drop', handleDrop);
+			});
+		});
+		
+	</script>
+</head>
+<body>
+	<div class="sources-wrap">
+		<div class="sources">
+			<a draggable="true" href="http://www.google.com">Visit Google</a>
+			<a draggable="true" href="http://www.amazon.com">Visit Amazon</a>
+			<a draggable="true" href="http://www.ebay.com">Visit Ebay</a>
+			<p draggable="true">Lorem ipsum</p>
+			<p draggable="true">dolor sit amet</p>
+			<p draggable="true">sed lorem lorem</p>
+			<div draggable="true" data-item="cake">Have some cake</div>
+			<div draggable="true" data-item="bread">Have some bread</div>
+			<div draggable="true" data-item="biscuits">Have some biscuits</div>
+		</div>
+		<p>Copy?</p>
+		<input type="checkbox" checked>
+	</div>
+	<div class="targets">
+		<div>
+			<h1>I accept links</h1>
+			<div id="link-target">
+			</div>
+		</div>
+		<div>
+			<h1>I accept text</h1>
+			<div id="text-target">
+			</div>
+		</div>
+		<div>
+			<h1>I accept elements</h1>
+			<div id="node-target">
+			</div>
+		</div>
+	</div>
+</body>
+</html>

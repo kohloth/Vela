@@ -1,0 +1,11 @@
+@mixin small-button {
+	margin: 0;
+	text-decoration: none;
+	font-size: inherit;
+	font-family: inherit;
+	border: 1px solid #222;
+	padding: 3px 5px;
+	border-radius: 3px;
+	color: #aaa;
+	background: #333;
+}

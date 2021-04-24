@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+
+			// In this example, we establish prototypal links via invoking functions with the 'new' keyword.
+
+			document.addEventListener('DOMContentLoaded', () => {
+
+				function PowerOfBeingAHumanoid() {
+					this.numberOfBones = 206;
+				};
+
+				function PowerOfFlight() {
+					PowerOfBeingAHumanoid.call(this);
+					this.power = 'flying';
+					this.powerUses = ['Saving babies from buildings', 'Saving cats from trees'];
+					this.usePower = function() {
+						console.log(this.personName + ' is flying.');
+					};
+				};
+
+				// Create a superman object, which descends from the
+				// power of flight prototype.
+				var superman = new PowerOfFlight();
+				superman.personName = 'Clark kent';
+				superman.job = 'News reporter';
+				superman.work = function() {
+					console.log(this.personName + ' is typing really fast.');
+				};
+
+				// Work with the superman object, and make him do things.
+				console.log(superman.numberOfBones);
+				superman.work();
+				superman.usePower();
+
+				// Inspect superman
+				// Prints false: The superman objects association with PowerOfBeingAHumanoid is blocked by its association with PowerOfFlight.
+				// The latter occupies the superman objects prototype slot.
+				console.log(superman instanceof PowerOfBeingAHumanoid ? 'Superman is an instanceof PowerOfBeingAHumanoid' : 'Superman is not an instanceof PowerOfBeingAHumanoid');
+				// Prints true - The supermans prototype slot is occupied with a reference to the PowerOfFlight object.
+				console.log(superman instanceof PowerOfFlight ? 'Superman is an instanceof PowerOfFlight' : 'Superman is not an instanceof PowerOfFlight');
+
+				// Now override some properties of the powerOfFlight giving object.
+				PowerOfFlight.usePower = function() {
+					console.log(this.name + ' is actually just suspended with invisible wires.');
+				};
+				PowerOfFlight.powerUses = ['Impressing cinema-goers.'];
+
+				// Now see if the superman object has copies of the properties present on the PowerOfFlight object, or references to them.
+				console.log(PowerOfFlight.usePower == superman.usePower); // false - the function is a copy!
+				superman.usePower(); // Prints 'Clark kent is flying.' - the function is a copy!
+				console.log(superman.powerUses); // Prints '['Saving babies from buildings', 'Saving cats from trees']' - the object is a copy!
+
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

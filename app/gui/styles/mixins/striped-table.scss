@@ -1,0 +1,12 @@
+@mixin striped-table($bem-name) {
+	#{$bem-name}-thead {
+		text-align: left;
+		border-bottom: 1px solid #444;
+	}
+	#{$bem-name}-tbody #{$bem-name}-tr:nth-child(even) {
+		background: #181818;
+	}
+	#{$bem-name}-td {
+		padding: 2px;
+	}
+}

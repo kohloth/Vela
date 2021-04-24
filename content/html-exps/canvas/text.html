@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			background: #999;
+		}
+		canvas {
+			background: #ccc;
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		
+			const canvas = document.getElementsByTagName('canvas')[0];
+			const styles = getComputedStyle(canvas);
+			canvas.setAttribute('width', styles.width);
+			canvas.setAttribute('height', styles.height);
+			const ctx = canvas.getContext('2d');
+			
+			// CanvasRenderingContext2D.fillText(text, x, y [, maxWidth]);
+			
+			// Text is positioned from RIGHT and TOP edges of text box, at:
+			// RIGHT text edge: 200 from canvas left edge,
+			// and TOP text edge: 0 from canvas top edge.
+			// Text also has a maxwidth constraint of 50.
+			ctx.font = '50px sans-serif';
+			ctx.fillStyle = 'red';
+			ctx.textBaseline = 'top';
+			ctx.textAlign = 'right';
+			ctx.fillText ('Red text', 200, 0, 50);
+			
+			// Text is positioned from LEFT and BOTTOM edges of text box, at:
+			// LEFT text edge: 0 from canvas left edge,
+			// and BOTTOM text edge: 200 from canvas top edge.
+			ctx.font = '20px sans-serif';
+			ctx.fillStyle = 'purple';
+			ctx.textAlign = 'left';
+			ctx.textBaseline = 'bottom';
+			ctx.fillText ('Purple text', 0, 200);
+		});
+	</script>
+</head>
+<body>
+	<canvas></canvas>
+</body>
+</html>

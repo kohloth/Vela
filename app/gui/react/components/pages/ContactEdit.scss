@@ -1,0 +1,21 @@
+@import '../../../styles/foundations';
+
+.contact-edit {
+	max-width: 500px;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	&__body-input {
+		width: 100%;
+		flex-grow: 1;
+		padding: 10px;
+		line-height: 1.6em;
+		margin-bottom: 10px;
+	}
+	&__save-button {
+		@include large-button;
+	}
+	.form-group__label {
+		width: 200px;
+	}
+}

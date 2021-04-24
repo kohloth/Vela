@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			background: #000;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin: 0;
+			padding: 0;
+			width: 100vw;
+			height: 100vh;
+		}
+		canvas {
+			background: #444;
+			width: 90vw;
+			height: 60vw;
+		}
+		button {
+			width: 100px;
+			margin: 5px;
+		}
+	</style>
+	<script>
+		var app = (function() {
+		
+			let loopHandle = null;
+			let canvas = null;
+			let ctx = null;
+			let cachedWidth = null;
+			let cachedHeight = null;
+			let lastTime = null;
+			let markerOffset = null;
+			let markerReverse = false;
+			let handRotation = 0;
+			
+			function adjustCanvasSize() {
+				canvas.removeAttribute('width');
+				canvas.removeAttribute('height');
+				const styles = getComputedStyle(canvas);
+				
+				cachedHeight = parseInt(styles.height);
+				
+				let newWidth = parseInt(styles.width);
+				let widthDelta = 1;
+				if (cachedWidth) {
+					widthDelta = ((100 / cachedWidth) * newWidth) / 100;
+					markerOffset *= widthDelta;
+				}
+				cachedWidth = newWidth;
+				
+				canvas.setAttribute('width', cachedWidth);
+				canvas.setAttribute('height', cachedHeight);
+			}
+			function init() {
+				canvas = document.getElementsByTagName('canvas')[0];
+				ctx = canvas.getContext('2d');
+				adjustCanvasSize();
+				markerOffset = w(25);
+				play();
+			}
+			function play() {
+				if (!loopHandle) {
+					lastTime = (new Date()).getTime();
+					render();
+				}
+			}
+			function w(v = 100) {
+				return (cachedWidth / 100) * v;
+			}
+			function h(v = 100) {
+				return (cachedHeight / 100) * v;
+			}
+			function stop() {
+				cancelAnimationFrame(loopHandle);
+				loopHandle = null;
+			}
+			function render() {
+				loopHandle = requestAnimationFrame(() => {
+				
+					// Work out delta
+					const currentTime = (new Date()).getTime();
+					const delta = (currentTime - lastTime) / 1000;
+					
+					// Work out clock hand rotational end position
+					handRotation += ((Math.PI * 2) / 60) * delta;
+					
+					// The small rectangle should move at a rate of 10% of the screen width per second.
+					// This is 20% of the large rectangle width per second.
+					// It should take 5 seconds to complete a run.
+					const squareAdj = delta * w(10);
+					if (markerOffset > w(75)) {
+						markerReverse = true;
+					}
+					if (markerOffset < w(25)) {
+						markerReverse = false;
+					}
+					if (markerReverse) {
+						markerOffset -= squareAdj;
+					} else {
+						markerOffset += squareAdj;
+					}
+				
+					// Clear canvas for full redraw
+					ctx.clearRect(0, 0, w(), h());
+				
+					// Draw things
+					{
+						// Draw big rectangle
+						ctx.fillStyle = '#0abfac';
+						ctx.fillRect(w(25), h(25), w(50), h(50));
+						
+						// Draw little moving rectangle
+						ctx.fillStyle = '#dd3322';
+						ctx.fillRect(markerOffset, w(10), w(1), h(10));
+						
+						// Draw clock hand
+						ctx.beginPath();
+						ctx.strokeStyle = '#ff0abf';
+						ctx.lineWidth = 10;
+						ctx.moveTo(w(50), h(50));
+						ctx.arc(w(50), h(50), h(25), 0, handRotation);
+						ctx.stroke();
+					}
+					
+					// Recurse
+					lastTime = currentTime;
+					render();
+				});
+			}
+			return { init, stop, play, adjustCanvasSize };
+		})();
+		document.addEventListener('DOMContentLoaded', () => {
+			app.init();
+		});
+		window.addEventListener('resize', () => {
+			app.adjustCanvasSize();
+		});
+	</script>
+</head>
+<body>
+	<canvas></canvas>
+	<button onclick="app.play()">Play</button>
+	<button onclick="app.stop()">Stop</button>
+</body>
+</html>

@@ -1,0 +1,66 @@
+.mark {
+	h1, h2, h3, h4, h5, h6 {
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	p, ul, ol, h1, h2, h3, h4, h5, h6 {
+		margin: 20px 0;
+		line-height: 1.4em;
+	}
+	li {
+		margin-bottom: 5px;
+		margin-top: 5px;
+	}
+	ul, ol {
+		margin-left: 40px;
+	}
+
+	h1 {
+	}
+	h2 {
+	}
+	h3 {
+	}
+	h4 {
+	}
+	h5 {
+	}
+	h6 {
+	}
+	p {
+	}
+	ul {
+		list-style: disc;
+	}
+	ol {
+		list-style:lower-roman;
+	}
+	li {
+	}
+	table {
+		margin: 0 -3px;
+		th, td {
+			text-align: left;
+			padding: 3px;
+		}
+	}
+	pre {
+		font-family: monospace;
+		background: #000;
+		border-radius: 3px;
+		padding: 10px;
+		line-height: 1.4em;
+	}
+	code {
+		font-family: monospace;
+		background: #000;
+		border-radius: 6px;
+		padding: 2px 5px;
+	}
+	pre code {
+		padding: 0;
+	}
+	a {
+		color: inherit;	
+	}
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			background: #999;
+		}
+		canvas {
+			background: #ccc;
+			width: 500px;
+			height: 500px;
+		}
+	</style>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		
+			const canvas = document.getElementsByTagName('canvas')[0];
+			const styles = getComputedStyle(canvas);
+			canvas.setAttribute('width', styles.width);
+			canvas.setAttribute('height', styles.height);
+			const ctx = canvas.getContext('2d');
+			
+			// Placed image
+			//ctx.drawImage(image, offsetX, offsetY);
+			//ctx.drawImage(image, offsetX, offsetY, imageWidth, imageHeight);
+			//ctx.drawImage(image, cropFromX, cropFromY, cropAreaWidth, cropAreaHeight, offsetX, offsetY, imageWidth, imageHeight);
+			
+			let images = new Map([
+				['mich', new Map([
+					['url', './resources/mich.jpg'],
+					['handle', null]
+				])],
+				['venus', new Map([
+					['url', './resources/venus.png'],
+					['handle', null]
+				])]
+			]);
+			
+			let imagePromises = [];
+			for (let [imageKey, image] of images) {
+				imagePromises.push(new Promise((resolve, reject) => {
+					let handle = new Image();
+					handle.addEventListener('load', () => {
+						resolve();
+					});
+					handle.addEventListener('error', () => {
+						reject();
+					});
+					handle.src = image.get('url');
+					image.set('handle', handle);
+				}));
+			}
+			Promise.all(imagePromises)
+			.then(() => {
+			
+				let venusImage = images.get('venus').get('handle');
+				let michImage = images.get('mich').get('handle');
+			
+				// Placed image
+				ctx.drawImage(venusImage, 10, 50);
+				
+				// Scaled image
+				ctx.drawImage(venusImage, 110, 50, 50, 50);
+				
+				// Cropped and scaled image
+				ctx.drawImage(michImage, 200, 100, 50, 50, 10, 160, 150, 150);
+				
+			});
+
+		});
+	</script>
+</head>
+<body>
+	<canvas></canvas>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+
+				var framework = (() => {
+					var modules = [];
+					function init() {
+						modules.forEach((module) => {
+							module.instances = [];
+							var matchingNodes = document.querySelectorAll(module.proto.rootSelector);
+							matchingNodes.forEach((node) => {
+								var instance = Object.create(module.proto);
+								instance.init(node);
+								module.instances.push(instance);
+							});
+						});
+					}
+					function registerModule(proto) {
+						modules.push({proto});
+					}
+					return {
+						init,
+						registerModule
+					};
+				})();
+
+				framework.registerModule({
+					rootSelector: '.mod-button',
+					init(rootNode) {
+						this.rootNode = rootNode;
+						rootNode.addEventListener('click', () => {
+							var event = new CustomEvent('framework:button:clicked', { detail: {
+								productType: this.getValue()
+							}});
+							document.dispatchEvent(event);
+						});
+					},
+					getValue() {
+						return this.rootNode.dataset.value;
+					},
+				});
+
+				framework.registerModule({
+					rootSelector: '.mod-cart',
+					init(rootNode) {
+						this.rootNode = rootNode;
+						this.props = {
+							glovesQty: 0,
+							hatQty: 0,
+							scarfQty: 0,
+						};
+						document.addEventListener('framework:button:clicked', (e) => {
+							var propKey = e.detail.productType + 'Qty';
+							this.props[propKey]++;
+							this.updateDisplay();
+						});
+					},
+					updateDisplay() {
+						this.rootNode.querySelector('.qty-gloves').childNodes[0].textContent = this.props.glovesQty;
+						this.rootNode.querySelector('.qty-hat').childNodes[0].textContent = this.props.hatQty;
+						this.rootNode.querySelector('.qty-scarf').childNodes[0].textContent = this.props.scarfQty;
+					},
+				});
+
+				framework.init();
+			});
+		</script>
+	</head>
+	<body>
+
+		<button class="mod-button" data-value="gloves">Buy gloves</button>
+		<button class="mod-button" data-value="hat">Buy hat</button>
+		<button class="mod-button" data-value="scarf">Buy scarf</button>
+
+		<div class="mod-cart">
+			<p>Gloves qty: <span class="qty-gloves">0</span></p>
+			<p>Hats qty: <span class="qty-hat">0</span></p>
+			<p>Scarves qty: <span class="qty-scarf">0</span></p>
+		</div>
+
+	</body>
+</html>

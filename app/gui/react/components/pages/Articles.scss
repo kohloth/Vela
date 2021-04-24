@@ -1,0 +1,56 @@
+@import '../../../styles/foundations';
+
+.articles {
+	max-width: 1000px;
+	&__head {
+		display: flex;
+		width: 100%;
+		margin: 0 -20px;
+		> * {
+			padding: 0 20px;
+		}
+	}
+	&__head-input {
+		height: 30px;
+	}
+	&__new-button {
+		@include large-button;
+		width: 300px;
+		height: 30px;
+	}
+	&__keyword {
+		display: inline-block;
+		padding: 2px 5px;
+		border-radius: 3px;
+		background: #242424;
+		margin: 0 3px 0 0;
+	}
+	&__main-table-table {
+		width: 100%;
+	}
+	&__table-row-link {
+		text-decoration: inherit;
+		color: inherit;
+	}
+	&__table-row-button {
+		@include small-button;
+		margin-left: 5px;
+	}
+	&__main-table-td_actions {
+		text-align: right;
+	}
+	&__main-table-td_actions,
+	&__main-table-td_created-at,
+	&__main-table-td_updated-at,
+	&__main-table-td_keywords,
+	&__main-table-td_title {
+		white-space: nowrap;
+	}
+	&__main-table-td_title {
+		max-width: 400px;
+		overflow: hidden;
+ 		text-overflow: ellipsis;
+	}
+}
+
+@include striped-table('.articles__main-table');

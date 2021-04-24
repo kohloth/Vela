@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+
+				var framework = (() => {
+					var modules = [];
+					function init() {
+						modules.forEach((module) => {
+							module.instances = [];
+							var matchingNodes = document.querySelectorAll(module.proto.rootSelector);
+							matchingNodes.forEach((node) => {
+								var instance = Object.create(module.proto);
+								instance.init(node);
+								module.instances.push(instance);
+							});
+						});
+					}
+					function registerModule(proto) {
+						modules.push({proto});
+					}
+					return {
+						init,
+						registerModule
+					};
+				})();
+
+				framework.registerModule({
+					rootSelector: '.mod-button',
+					init(rootNode) {
+						rootNode.addEventListener('mouseenter', () => {
+							console.log(this.getText());
+						});
+						rootNode.addEventListener('click', () => {
+							console.log(this.getValue());
+						});
+						this.rootNode = rootNode;
+					},
+					getValue() {
+						return this.rootNode.dataset.value;
+					},
+					getText() {
+						return this.rootNode.childNodes[0].nodeValue;
+					},
+				});
+
+				framework.init();
+			});
+		</script>
+	</head>
+	<body>
+		<button class="mod-button" data-value="gloves">Buy gloves</button>
+		<button class="mod-button" data-value="hat">Buy hat</button>
+		<button class="mod-button" data-value="scarf">Buy scarf</button>
+	</body>
+</html>

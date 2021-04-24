@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+
+			// This is the same as the previous example, except, functions exist as properties
+			// on the constructor functions resident prototypes, achieving an effect whereby
+			// created objects do not carry their own copies of said functions.
+			// We also ensure that instanceof behaves in a representative fashion.
+
+			document.addEventListener('DOMContentLoaded', () => {
+
+				function PowerOfBeingAHumanoid() {
+					this.numberOfBones = 206;
+				};
+
+				function PowerOfFlight() {};
+				PowerOfFlight.prototype = new PowerOfBeingAHumanoid();
+				PowerOfFlight.prototype.power = 'flying';
+				PowerOfFlight.prototype.powerUses = ['Saving babies from buildings', 'Saving cats from trees'];
+				PowerOfFlight.prototype.usePower = function() {
+					console.log(this.personName + ' is flying.');
+				};
+
+				// Create a superman object, which has its prototype linked to
+				// the resident prototype, which exists as a property of the PowerOfFlight function.
+				var superman = new PowerOfFlight();
+				superman.personName = 'Clark kent';
+				superman.job = 'News reporter';
+				superman.work = function() {
+					console.log(this.personName + ' is typing really fast.');
+				};
+
+				// Work with the superman object, and make him do things.
+				console.log(superman.numberOfBones);
+				superman.work();
+				superman.usePower();
+
+				// Inspect superman
+				// Prints true: The superman objects association with PowerOfBeingAHumanoid is maintained.
+				console.log(superman instanceof PowerOfBeingAHumanoid ? 'Superman is an instanceof PowerOfBeingAHumanoid' : 'Superman is not an instanceof PowerOfBeingAHumanoid');
+				// Prints true: The superman objects association with PowerOfFlight is maintained.
+				console.log(superman instanceof PowerOfFlight ? 'Superman is an instanceof PowerOfFlight' : 'Superman is not an instanceof PowerOfFlight');
+
+				// Now override some properties of the powerOfFlight giving object.
+				PowerOfFlight.prototype.usePower = function() {
+					console.log(this.personName + ' is actually just suspended with invisible wires.');
+				};
+				PowerOfFlight.prototype.powerUses = ['Impressing cinema-goers.'];
+
+				// Now see if the superman object has copies of the properties present on the PowerOfFlight object, or references to them.
+				console.log(PowerOfFlight.prototype.usePower == superman.usePower); // true - the function is a reference!
+				superman.usePower(); // Prints 'Clark kent is actually just suspended with invisible wires.' - the function is a reference!
+				console.log(superman.powerUses); // Prints '['Saving babies from buildings', 'Saving cats from trees']' - the object is a reference!
+
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

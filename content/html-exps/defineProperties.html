@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		'use strict';
+		let obj = {};
+		Object.defineProperties(obj, {
+			dessert: {
+				value: 'Ice cream',
+				enumerable: true,
+			},
+			flavour: {
+				value: 'Vanilla',
+				enumerable: false,
+				writable: true,
+				configurable: true
+			}
+		});
+		console.log('Keys: ', Object.keys(obj));
+		console.log('Values: ', Object.values(obj));
+		console.log('Entries: ', Object.entries(obj));
+		console.log('For in');
+		for (var key in obj) {
+			console.log(key);
+		}
+		// obj.flavour = 'Choc'; // error!
+		delete obj.flavour;
+	</script>
+</head>
+<body>
+</body>
+</html>

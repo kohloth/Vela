@@ -1,0 +1,25 @@
+@import '../../../styles/foundations';
+
+.article-view {
+	&__title {
+		margin-bottom: 10px;
+	}
+	&__keywords {
+		margin-bottom: 10px;
+	}
+	&__keyword {
+		display: inline-block;
+		padding: 2px 5px;
+		border-radius: 3px;
+		background: #242424;
+		margin: 0 3px 0 0;
+	}
+	&__created-at {
+		margin-bottom: 10px;
+	}
+	&__updated-at {
+		margin-bottom: 10px;
+	}
+	&__body {
+	}
+}

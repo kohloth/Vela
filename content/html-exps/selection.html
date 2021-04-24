@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		
+			let subject;
+			subject = document.getElementById('first-menu-link'); // Element
+			subject = document.getElementById('nothing'); // null
+			subject = document.getElementsByClassName('red'); // HTMLCollection
+			subject = document.getElementsByClassName('nothing'); // HTMLCollection
+			subject = document.getElementsByTagName('li'); // HTMLCollection
+			subject = document.getElementsByTagName('nothing'); // HTMLCollection
+			subject = document.querySelector('p.red'); // Element
+			subject = document.querySelector('p.nothing'); // null
+			subject = document.querySelectorAll('p.red'); // NodeList
+			subject = document.querySelectorAll('p.nothing'); // NodeList
+			subject = document.children; // HTMLCollection (html)
+			subject = document.children[0].children[1]; // HTMLCollection (body)
+			subject = document.children[0].children[1].children; // HTMLCollection (header, main footer)
+			subject = document.childNodes; // NodeList: doctype, html
+			subject = document.childNodes[1].childNodes[2].childNodes // NodeList (text, header, text, main, text, footer, text)
+			
+			console.log(subject);
+			
+		});
+	</script>
+</head>
+<body>
+	<header>
+		<h1>Welcome to the website</h1>
+		<ul>
+			<li><a id="first-menu-link">Menu item one  <span>hello</span></a></li>
+			<li><a>Menu item two</a></li>
+			<li><a>Menu item three</a></li>
+		</ul>
+	</header>
+	<main>
+		<div class="para-set-1">
+			<p class="red">lorem</p>
+			<p class="red">ipsum <span>hello</span></p>
+			<p>dolor</p>
+		</div>
+		<div class="para-set-2">
+			<p class="red">sit</p>
+			<p>amet</p>
+		</div>
+		<p>getElementById, querySelector: element or null</p>
+		<p>getElementsByClassName, getElementsByTagName: Always a HTMLCollection</p>
+		<p>querySelectorAll: Always a NodeList</p>
+	</main>
+	<footer>
+		<p>I am the foooter</p>
+	</footer>
+</body>
+</html>

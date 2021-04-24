@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			background: #999;
+		}
+		canvas {
+			background: #ccc;
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const canvas = document.getElementsByTagName('canvas')[0];
+			const styles = getComputedStyle(canvas);
+			canvas.setAttribute('width', styles.width);
+			canvas.setAttribute('height', styles.height);
+			const ctx = canvas.getContext('2d');
+			ctx.fillStyle = '#228855';
+			ctx.fillRect(10, 10, 100, 100);
+		});
+	</script>
+</head>
+<body>
+	<canvas></canvas>
+</body>
+</html>

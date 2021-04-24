@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+
+				var notificationsModule = (() => {
+					return {
+						alert(message) {
+							return alert(message);
+						},
+						confirm(message) {
+							return confirm(message);
+						},
+						toast(message) {
+							var pNode = document.createElement('p');
+							var textNode = document.createTextNode(message);
+							pNode.appendChild(textNode);
+							document.body.appendChild(pNode);
+							setTimeout(() => {
+								pNode.remove();
+							}, 3000);
+						}
+					};
+				})();
+
+				notificationsModule.toast('hello');
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

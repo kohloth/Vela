@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+
+				// In this pattern, we mix properties directly into dependant objects.
+				// Unfortunately, with this technique, properties are copies.
+
+				// Create objects that we will take properties from, and subsequently mix into other, dependent objects.
+				var powerOfFlight = {
+					power: 'flying',
+					usePower() {
+						console.log(this.personName + ' is flying.');
+					},
+					powerUses: ['Saving babies from buildings', 'Saving cats from trees']
+				};
+				var powerOfRegeneration = {
+					power: 'regeneration',
+					usePower() {
+						console.log(this.personName + ' is regenerating.');
+					},
+					powerUses: ['Recovering from gunshots', 'Mitigating the effects of aging']
+				};
+
+				// Create some basic objects. These will have properties from the objects above copied into them.
+				// At this point, all 3 of these objects represent ordinary people without superpowers.
+				var jonahJameson = {
+					personName: 'Jonah J Jameson',
+					job: 'Director at the Bugle newspaper',
+					work() {
+						console.log(this.personName + ' is shouting at people, telling them to get out of his office.');
+					}
+				};
+				var superman = {
+					personName: 'Clark kent',
+					job: 'News reporter',
+					work() {
+						console.log(this.personName + ' is typing really fast.');
+					}
+				};
+				var wolverine = {
+					personName: 'Logan',
+					job: 'Cage fighter',
+					work() {
+						console.log(this.personName + ' is fighting people.');
+					}
+				};
+				
+				// We don't want our mixin to copy properties from object prototypes.
+				// This should not be copied accross.
+				jonahJameson.__proto__.skeletalLayout = 'Humanoid';
+				superman.__proto__.skeletalLayout = 'Humanoid';
+				wolverine.__proto__.skeletalLayout = 'Humanoid';
+
+				// Create a reusable function that copies properties from one object to another object.
+				function mixThingsIn(receivingObject, givingObject) {
+					for (var prop in givingObject) {
+						if (givingObject.hasOwnProperty(prop)) {
+							receivingObject[prop] = givingObject[prop];
+						}
+					}
+				}
+
+				// Give wolverine and superman some powers.
+				mixThingsIn(superman, powerOfFlight);
+				mixThingsIn(wolverine, powerOfRegeneration);
+
+				// Test each persons ability to work.
+				jonahJameson.work();
+				superman.work();
+				wolverine.work();
+
+				// The each superhero's ability to use their power.
+				superman.usePower();
+				wolverine.usePower();
+
+				// Test an ordinary person's ability to use their power - should result in an error!
+				try {
+					jonahJameson.usePower();
+				} catch (e) {
+					console.log('Mr Jameson has no special powers');
+				}
+
+				// Now override some properties of the powerOfFlight giving object.
+				powerOfFlight.usePower = function() {
+					console.log(this.personName + ' is actually just suspended with invisible wires.');
+				};
+				powerOfFlight.powerUses = ['Impressing cinema-goers.'];
+
+				// Now see if the superman object has copies of the properties present on the powerOfFlight object, or references to them.
+				console.log(powerOfFlight.usePower == superman.usePower); // false - the function is a copy!
+				superman.usePower(); // Prints 'Clark kent is flying.' - the function is a copy!
+				console.log(superman.powerUses); // Prints '['Saving babies from buildings', 'Saving cats from trees']' - the object is a copy!
+
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

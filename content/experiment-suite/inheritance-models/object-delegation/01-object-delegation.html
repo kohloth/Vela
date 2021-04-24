@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+
+			document.addEventListener('DOMContentLoaded', () => {
+
+				// Create an object that will be used as a prototype for
+				// all objects that represent individual humanoids.
+				var powerOfBeingAHumanoid = {
+					numberOfBones: 206
+				};
+
+				// Create a power of flight prototype object, which descends from the
+				// power of being a humanoid prototype, and which will be used as a prototype
+				// for all objects that represent humanoids with the power of flight.
+				var powerOfFlight = Object.create(powerOfBeingAHumanoid, {
+					power: {
+						value: 'flying',
+						writable: true,
+						enumerable: true,
+						configurable: true
+					},
+					usePower: {
+						value: function() {
+							console.log(this.personName + ' is flying.');
+						},
+						writable: true,
+						enumerable: true,
+						configurable: true
+					}
+				});
+
+				// Create a superman object, which descends from the
+				// power of flight prototype.
+				var superman = Object.create(powerOfFlight, {
+					personName: {value: 'Clark kent'},
+					job: {value: 'News reporter'},
+					work: { value: function() {
+						console.log(this.personName + ' is typing really fast.');
+					}}
+				});
+
+				// Inspect superman
+				// Inspecting superman, to see what he is an instanceof, will fail: The instanceof operator only works when the value on its right hand side is a function.
+				try {
+					console.log(superman instanceof powerOfBeingAHumanoid ? 'Superman is an instanceof powerOfBeingAHumanoid' : 'Superman is not an instanceof powerOfBeingAHumanoid');
+				} catch (e) {
+					console.log(e);
+				}
+				try {
+					console.log(superman instanceof powerOfFlight ? 'Superman is an instanceof powerOfFlight' : 'Superman is not an instanceof powerOfFlight');
+				} catch (e) {
+					console.log(e);
+				}
+
+				// Instead of the above, we can deduce inheritance by directly inspecting the objects prototype.
+				console.log(superman.__proto__ == powerOfFlight ? 'Superman has the power of flight.' : 'Superman does not have the power of flight.');
+
+				// However, the above technique only works when we know the prototype chain position of the object we are checking against.
+				console.log(superman.__proto__.__proto__ == powerOfBeingAHumanoid ? 'Superman is a humanoid.' : 'Superman is not a humanoid.');
+
+				// We could use some kind of helper function to assist us with this.
+				function hasPrototype(obj, proto) {
+					var subject = obj;
+					var hasIt = false;
+					while (subject = subject.__proto__) {
+						if (subject === proto) hasIt = true;
+					}
+					return hasIt;
+				}
+
+				console.log(hasPrototype(superman, powerOfFlight) ? 'Superman has the power of flight' : 'Superman does not have the power of flight');
+				console.log(hasPrototype(superman, powerOfBeingAHumanoid) ? 'Superman is a humanoid' : 'Superman is not a humanoid');
+
+				// Work with the superman object, and make him do things.
+				superman.work();
+				superman.usePower();
+
+				// Now, adjust the definition of the usePower method that exists as a property
+				// of the powerOfFlight object, which we are using as a prototype.
+				// Note that this will affect all objects that descend from the powerOfFlight object,
+				// as this object is shared among them all.
+				powerOfFlight.usePower = function() {
+					console.log(this.personName + ' is actually just suspended with invisible wires.');
+				};
+				superman.usePower();
+
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

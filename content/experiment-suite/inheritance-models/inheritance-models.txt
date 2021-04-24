@@ -1,0 +1,11 @@
+Constructor function
+A pattern quite unique to javascript whereby functions can have meta properties attached to them and then invoked with the 'new' keyword as a means of establishing property delegation from the produced object to the functions meta property object. Produces a structure that is a bit muddy and unclear.
+
+Object delegation
+A cleaner way of achieving what is achieved with the constructor function pattern - by means of explicitly specifying that object a should delegate to object b; by explicitly making one object the prototype of the other.
+
+Class
+A syntactical facade designed to give the impression of classical inheritance. The most muddy of all implementations.
+
+Mixin
+The practice of taking individual properties from one object, and attaching them to another object - as opposed to linking a whole object to another whole object.

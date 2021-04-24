@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+
+				var alertModule = (() => {
+					function nativeAlert(message) {
+						return alert(message);
+					}
+					function customAlert(message) {
+						console.log(message);
+					}
+					function changeImplementation(useNative = false) {
+						var func = useNative ? nativeAlert : customAlert;
+						api.alert = func;
+					}
+					var api = {
+						alert: nativeAlert,
+						changeImplementation,
+					};
+					return api;
+				})();
+
+				alertModule.alert('hello');
+				alertModule.changeImplementation();
+				alertModule.alert('hello');
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

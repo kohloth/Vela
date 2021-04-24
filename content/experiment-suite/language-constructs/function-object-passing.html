@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+
+// Is javascript pass by value or pass by reference?
+
+function adjustNumber(n) {
+	n++;
+	console.log(`n inside function after being adjusted: ${n}`); // 2
+}
+let n1 = 1;
+adjustNumber(n1);
+console.log(`n1 outside function after being adjusted: ${n1}`); // 1
+// Therefore, variables holding numbers are passed by value
+
+function adjustObject(o) {
+	o.n++;
+	console.log(`o.n inside function after being adjusted: ${o.n}`); // 2
+}
+let o1 = {n: 1};
+adjustObject(o1);
+console.log(`o1 outside function after being adjusted: ${o1.n}`); // 2
+// Therefore, it could be said that objects are passed by reference.
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// However, there is a nuance. When passing an object to a function, it is actually still passed by value,
+// and the value that is passed is a reference to the object.
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+function changeStuff(a, b, c)
+{
+	a = a * 10;
+	b.item = "changed";
+	c = {item: "changed"};
+}
+
+var num = 10;
+var obj1 = {item: "unchanged"};
+var obj2 = {item: "unchanged"};
+
+changeStuff(num, obj1, obj2);
+
+console.log(num); // 10 (unchanged)
+console.log(obj1.item); // changed
+console.log(obj2.item); // unchanged <-- LOOK
+
+// The reason the last value is unchanged, is because when the code inside the changeStuff
+// function is executing, the value of the argument variable c is overridden from being
+// a reference to the exernal obj2 variable, and instead becomes a pointer to a new
+// value - in this case, a new object. The expression "c = ..." decouples the c
+// argument from the external object, assigning it a new value.
+
+// Therefore, javascript is "pass by value", when primatives are concerned.
+// Javascript can be generalised as "pass by reference" when objects are concerned.
+
+// However, to be more correct, when objects are concerned, javascript can be described as:
+// Reference-by-value
+// Call-by-sharing
+
+// This is similar to C# and Java.
+
+</script>
+</head>
+<body>
+</body>
+</html>

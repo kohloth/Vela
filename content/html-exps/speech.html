@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		window.speechSynthesis.onvoiceschanged = function() {
+			let rand = (max) => Math.floor(Math.random() * Math.floor(max));
+			let voices = window.speechSynthesis.getVoices();
+			let voiceIndex = Math.floor(Math.random() * Math.floor(voices.length));
+			let utterance = new SpeechSynthesisUtterance('The rain in spain.');
+			utterance.voice = voices[voiceIndex];
+			utterance.pitch = Math.random();
+			utterance.rate = Math.random();
+			speechSynthesis.speak(utterance);
+		};
+	</script>
+</head>
+<body>
+</body>
+</html>

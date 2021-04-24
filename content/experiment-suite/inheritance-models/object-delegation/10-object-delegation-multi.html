@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script>
+
+			// This script represents an alternative to 'mixin-proto'. Instead of a flat structure of 'classes',
+			// where powerOfFlight and powerOfRegeneration are on the same level as powerOfBeingAHuman, in this recipe,
+			// we have powerOfFlight and powerOfRegeneration extending powerOfBeingAHuman.
+
+			// The advantage of this, is that an object with the powerOfFlight, or the powerOfRegeneration can be
+			// deduced as an 'instanceof' these things, AND and instance of powerOfBeingAHuman, without having to
+			// resort to duck typing.
+
+			// The disadvantage of this, is that the pattern, if used exactly in the way below, does not permit
+			// polymorphic inheritance.
+
+			document.addEventListener('DOMContentLoaded', () => {
+
+				// Create objects that we will delegate to, when accessed properties do not exist on the immediate objects.
+				// First, create the 'base class', "powerofBeingAHumanoid".
+				var powerOfBeingAHumanoid = {
+					personName: null,
+					job: null,
+					work() {
+						console.log((this.personName === null ? 'An unnamed humanoid' : this.personName) + ' is working.')
+					},
+					numberOfBones: 206
+				};
+
+				// Next, we will create a powerOfFlight object that we will use as a prototype of all objects that we wish to
+				// imbue with the power of flight. Note that the use of Object.create in the first line sets the prototype of
+				// powerOfFlight itself, linking this object to powerOfBeingAHumanoid.
+				var powerOfFlight = Object.create(powerOfBeingAHumanoid, {
+					power: {
+						value: 'flying',
+						writable: true,
+						enumerable: true,
+						configurable: true
+					},
+					usePower: {
+						value: function() {
+							console.log(this.personName + ' is flying!!');
+						},
+						writable: true,
+						enumerable: true,
+						configurable: true
+					}
+				});
+
+				// As above, but for the powerOfRegeneration object.
+				var powerOfRegeneration = Object.create(powerOfBeingAHumanoid, {
+					power: {
+						value: 'regenerating',
+						writable: true,
+						enumerable: true,
+						configurable: true
+					},
+					usePower: {
+						value: function() {
+							console.log(this.personName + ' is regenerating!!');
+						},
+						writable: true,
+						enumerable: true,
+						configurable: true
+					}
+				});
+
+				// At this point, we have 3 objects that are intended for use as prototypes.
+				// Create some basic objects. These will have properties from the objects above copied into them.
+				var maryJane = Object.create(powerOfBeingAHumanoid, {
+					personName: {value: 'Mary Jane'}
+				});
+				var jonahJameson = Object.create(powerOfBeingAHumanoid, {
+					personName: {value: 'Jonah J Jameson'},
+					job: {value: 'Director at the Bugle newspaper'},
+					work: {value: function() {
+						console.log(this.personName + ' is shouting at people, telling them to get out of his office.');
+					}}
+				});
+				var superman = Object.create(powerOfFlight, {
+					personName: {value: 'Clark kent'},
+					job: {value: 'News reporter'},
+					work: { value: function() {
+						console.log(this.personName + ' is typing really fast.');
+					}}
+				});
+				var wolverine = Object.create(powerOfRegeneration, {
+					personName: {value: 'Logan'},
+					job: {value: 'Cage fighter'},
+					work: { value: function() {
+						console.log(this.personName + ' is fighting people.');
+					}}
+				});
+				var rogue = Object.create(powerOfFlight, {
+					personName: {value: 'Rogue'},
+					job: {value: 'Unemployed'},
+					work: { value: function() {
+						console.log(this.personName + ' is lounging about reading magazines.');
+					}}
+				});
+
+				// Test each humanoids ability to work.
+				console.log('Mary has ' + maryJane.numberOfBones + ' bones.');
+				maryJane.work();
+				console.log('Jonah has ' + jonahJameson.numberOfBones + ' bones.');
+				jonahJameson.work();
+				console.log('Clark has ' + superman.numberOfBones + ' bones.');
+				superman.work();
+				console.log('Logan has ' + wolverine.numberOfBones + ' bones.');
+				wolverine.work();
+				console.log('Rogue has ' + rogue.numberOfBones + ' bones.');
+				rogue.work();
+
+				// The each superhero's ability to use their power.
+				superman.usePower();
+				wolverine.usePower();
+				rogue.usePower();
+
+				// Test an ordinary humanoids's ability to use their power - should result in an error!
+				try {
+					jonahJameson.usePower();
+					console.log(jonahJameson.usePower);
+				} catch (e) {
+					console.log('Mr Jameson has no special powers.');
+				}
+
+				// Now, prove that each property that was copied from the giving object to the receiving object
+				// is truely a copy, and changes to the properties source will not change the copies.
+				powerOfFlight.usePower = function() {
+					console.log(this.personName + ' is actually just suspended with invisible wires!!');
+				};
+				superman.usePower();
+				rogue.usePower();
+
+				// Now inspect exactly what has been copied accross.
+				console.log(superman);
+
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

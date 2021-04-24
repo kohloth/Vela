@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+	
+		// As expected
+		console.log(Array.from('123')); // ["1", "2", "3"]
+		console.log(Array.from([1, 2, 3])); // [1, 2, 3]
+		console.log(Array.from('hello')); // ["h", "e", "l", "l", "o"]
+		console.log(Array.from(['one', 'two', 'three'])); // ["one", "two", "three"]
+		console.log((function() { return Array.from(arguments) })(1, 'two', 'three')); // [1, "two", "three"]
+		console.log(Array.from(new Set([4, 5, 6]))); // [4, 5, 6]
+		console.log(Array.from(new Map([['one', 1], ['two', 2], ['three', 3]]))); // [['one', 1], ['two', 2], ['three', 3]]
+
+		// Edge cases
+		console.log(Array.from(123)); // Empty array
+		console.log(Array.from(true)); // Empty array
+		console.log(Array.from(false)); // Empty array
+		console.log(Array.from(Symbol())); // Empty array
+		console.log(Array.from({one: 'a', two: 'b'})); // Empty array
+
+		// Throws
+		// console.log(Array.from(null)); // throws TypeError
+		// console.log(Array.from()); // throws TypeError
+		// console.log(Array.from(undefined)); // throws TypeError
+
+	</script>
+</head>
+<body>
+</body>
+</html>
