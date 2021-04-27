@@ -16,7 +16,7 @@ It also features:
 
 ## Installation
 
-1. Install NodeJS if you do not have it already.
+1. Install NodeJS if you do not have it already. You will need at least version 14.13.0, otherwise it will not work!
 
 2. Install ArangoDB and ensure the db server is running, if you do not have it already.
 
