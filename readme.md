@@ -80,6 +80,13 @@ Lastly, note that there are some handle little functions for backing up and rest
 
 `vela self:restore`
 
+## Troubleshooting
+
+If you experience issues with running vela, try the following:
+
+* Reinstall node modules. This can be done by deleting the `node_modules` directory and the `package-lock.json` file, and then re-running `npm i`.
+* If the GUI will not start then this is likely an issue with parcel.js. Try this command: `UV_THREADPOOL_SIZE=64 && vela self:startgui`.
+
 # Technical information
 
 Vela was built very quickly and is an attempt to get a primarily command-line-based personal organiser - that has a reasonably nice and intuituve command-line interface - up and running ASAP.
